@@ -30,6 +30,7 @@ module.exports = (nextConfig = {}) => ({
     const {
       disable = false,
       register = true,
+      customRegister = false,
       dest = distDir,
       sw = 'sw.js',
       dynamicStartUrl = true,
@@ -66,6 +67,10 @@ module.exports = (nextConfig = {}) => ({
       console.error('> [PWA] subdomainPrefix is deprecated, use basePath in next.config.js instead: https://nextjs.org/docs/api-reference/next.config.js/basepath')
     }
 
+    if (typeof register !== "boolean" && register !== "custom") {
+      console.error('> [PWA] `register` configuration must be one of `true`, `false` or `"custom"`')
+    }
+
     console.log(`> [PWA] Compile ${options.isServer ? 'server' : 'client (static)'}`)
     
     let { runtimeCaching = defaultCache } = pwa
@@ -84,15 +89,17 @@ module.exports = (nextConfig = {}) => ({
       })
     )
 
-    const registerJs = path.join(__dirname, 'register.js')
-    const entry = config.entry
-    config.entry = () =>
-      entry().then(entries => {
-        if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
-          entries['main.js'].unshift(registerJs)
-        }
-        return entries
-      })
+    if (register !== "custom" && register) {
+      const registerJs = path.join(__dirname, 'register.js')
+      const entry = config.entry
+      config.entry = () =>
+        entry().then(entries => {
+          if (entries['main.js'] && !entries['main.js'].includes(registerJs)) {
+            entries['main.js'].unshift(registerJs)
+          }
+          return entries
+        })
+    }
 
     if (!options.isServer) {
       const _dest = path.join(options.dir, dest)
@@ -106,11 +113,11 @@ module.exports = (nextConfig = {}) => ({
         minify: !dev
       })
 
-      if (register) {
+      if (register !== "custom" && register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
       } else {
         console.log(`> [PWA] Auto register service worker is disabled, please call following code in componentDidMount callback or useEffect hook`)
-        console.log(`> [PWA]   window.workbox.register()`)
+        console.log(`> [PWA] \`window.workbox.register()\``)
       }
 
       console.log(`> [PWA] Service worker: ${path.join(_dest, sw)}`)
