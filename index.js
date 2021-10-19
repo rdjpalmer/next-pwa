@@ -113,6 +113,9 @@ module.exports = (nextConfig = {}) => ({
         minify: !dev
       })
 
+      if (register === "custom") {
+        console.log(`> [PWA] Using custom service worker registeration. Please call \`window.workbox.register()\` in componentDidMount callback or useEffect hook`)
+      }
       if (register !== "custom" && register) {
         console.log(`> [PWA] Auto register service worker with: ${path.resolve(registerJs)}`)
       } else {
