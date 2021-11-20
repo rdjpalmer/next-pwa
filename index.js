@@ -29,7 +29,9 @@ module.exports = (nextConfig = {}) => ({
     } = options;
 
     let basePath = options.config.basePath;
+    console.log({ basePath });
     if (!basePath) basePath = "/";
+    console.log({ basePath });
 
     // For workbox configurations:
     // https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW
