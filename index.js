@@ -62,6 +62,8 @@ module.exports = (nextConfig = {}) => ({
       ...workbox
     } = pwa;
 
+    console.log({ dynamicStartUrl });
+
     if (typeof nextConfig.webpack === "function") {
       config = nextConfig.webpack(config, options);
     }
@@ -92,6 +94,8 @@ module.exports = (nextConfig = {}) => ({
 
     // inject register script to main.js
     const _sw = path.posix.join(basePath, sw.startsWith("/") ? sw : `/${sw}`);
+    console.log({ _scope, _sw, dynamicStartUrl, basePath });
+
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `'${_sw}'`,
