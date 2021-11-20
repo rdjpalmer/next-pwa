@@ -95,7 +95,7 @@ module.exports = (nextConfig = {}) => ({
     // inject register script to main.js
     const _sw = path.posix.join(basePath, sw.startsWith("/") ? sw : `/${sw}`);
     console.log({ _scope, _sw, dynamicStartUrl, basePath });
-
+    ``;
     config.plugins.push(
       new webpack.DefinePlugin({
         __PWA_SW__: `'${_sw}'`,
@@ -115,6 +115,8 @@ module.exports = (nextConfig = {}) => ({
       __PWA_CACHE_ON_FRONT_END_NAV__: `${Boolean(cacheOnFrontEndNav)}`,
       __PWA_RELOAD_ON_ONLINE__: `${Boolean(reloadOnOnline)}`,
     });
+
+    console.log(config.plugins.push);
 
     if (register !== "custom" && register) {
       const registerJs = path.join(__dirname, "register.js");
