@@ -141,7 +141,7 @@ module.exports = (nextConfig = {}) => ({
           (plugin) => plugin instanceof webpack.DefinePlugin
         ),
         success: ({ name }) => importScripts.unshift(name),
-        minify: !dev,
+        minify: false,
       });
 
       if (register === "custom") {
@@ -239,7 +239,7 @@ module.exports = (nextConfig = {}) => ({
               }
             });
           },
-          minify: !dev,
+          minify: false,
           pageExtensions,
         });
       }
